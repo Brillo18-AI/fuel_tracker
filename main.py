@@ -169,14 +169,14 @@ from google.oauth2.service_account import Credentials
 
 def connect_to_sheet():
     try:
-    creds_info = st.secrets["google_service_account"]
-    creds = Credentials.from_service_account_info(creds_info)
-    client = gspread.authorize(creds)
-    return client.open("FuelTracker")
+        creds_info = st.secrets["google_service_account"]
+        creds = Credentials.from_service_account_info(creds_info)
+        client = gspread.authorize(creds)
+        return client.open("FuelTracker")
     except Exception as e:
         st.error(f"Connection failed: {str(e)}")
         st.info("Please ensure: 1) APIs are enabled 2) Sheet is shared 3) creds.json exists")
-    return None
+        return None
 
 # Basic authentication
 
