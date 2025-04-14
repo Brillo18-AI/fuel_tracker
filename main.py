@@ -1,6 +1,6 @@
 # main.py
 import streamlit as st
-from oauth2client.service_account import ServiceAccountCredentials
+from oauth2client.service_account import Credentials
 from datetime import datetime
 from urllib.parse import quote
 from streamlit import title
@@ -168,14 +168,10 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 def connect_to_sheet():
-    try:
-        scope = [
-            'https://www.googleapis.com/auth/spreadsheets',
-            'https://www.googleapis.com/auth/drive'
-        ]
-        creds = Credentials.from_service_account_file('creds.json', scopes=scope)
-        client = gspread.authorize(creds)
-        return client.open("FuelTracker")
+    creds_info = st.secrets["google_service_account"]
+    creds = Credentials.from_service_account_info(creds_info)
+    client = gspread.authorize(creds)
+    return client.open("FuelTracker")
     except Exception as e:
         st.error(f"Connection failed: {str(e)}")
         st.info("Please ensure: 1) APIs are enabled 2) Sheet is shared 3) creds.json exists")
