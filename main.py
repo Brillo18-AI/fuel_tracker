@@ -12,18 +12,7 @@ def set_theme():
     st.markdown("""
     <style>
         
-        /* Fix submit button in forms */
-        div.stButton > button {
-        background-color: #4CAF50 !important;
-        color: white !important;
-        border-radius: 5px !important;
-        border: none !important;
-        padding: 0.5em 1em !important;
-        }
 
-        div.stButton > button:hover {
-        background-color: #45a049 !important;
-        }
 
         /* Fix black text in date picker */
         .stDateInput input {
@@ -142,6 +131,19 @@ def set_theme():
 # Add to your set_theme() function
 st.markdown("""
 <style>
+    
+    /* Fix submit button in forms */
+    div.stButton > button {
+    background-color: #4CAF50 !important;
+    color: white !important;
+    border-radius: 5px !important;
+    border: none !important;
+    padding: 0.5em 1em !important;
+    }
+
+    div.stButton > button:hover {
+    background-color: #45a049 !important;
+    }
     /* Tables */
     .stDataFrame {
         border: 1px solid #4CAF50 !important;
