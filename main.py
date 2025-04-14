@@ -131,7 +131,20 @@ def set_theme():
 # Add to your set_theme() function
 st.markdown("""
 <style>
-    
+    /* Force Submit button inside form to be green */
+    form button[type="submit"] {
+    background-color: #4CAF50 !important;
+    color: white !important;
+    border-radius: 5px !important;
+    border: none !important;
+    padding: 0.5em 1em !important;
+    font-weight: bold !important;
+    }
+
+    form button[type="submit"]:hover {
+    background-color: #45a049 !important;
+    }
+
     /* Fix submit button in forms */
     div.stButton > button {
     background-color: #4CAF50 !important;
