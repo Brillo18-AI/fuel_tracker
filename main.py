@@ -1,7 +1,5 @@
 # main.py
 import streamlit as st
-import gspread
-from google.oauth2.service_account import Credentials
 from datetime import datetime
 from urllib.parse import quote
 from streamlit import title
@@ -164,7 +162,8 @@ st.markdown("""
 set_theme()
 
 
-
+import gspread
+from google.oauth2.service_account import Credentials
 def connect_to_sheet():
     try:
         creds_info = st.secrets["google_service_account"]
