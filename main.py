@@ -12,18 +12,34 @@ def set_theme():
     st.markdown("""
     <style>
         
-        /* Submit button */
-        .stButton>button {
+        /* Fix black Submit button */
+        button[kind="primary"] {
         background-color: #4CAF50 !important;
         color: white !important;
         border-radius: 5px !important;
         border: none !important;
         }
-    
-        /* Button hover effect */
-        .stButton>button:hover {
+        button[kind="primary"]:hover {
         background-color: #45a049 !important;
         }
+
+        /* Fix black text in date picker */
+        .stDateInput input {
+        background-color: white !important;
+        color: black !important;
+        caret-color: black !important;
+        border-color: #4CAF50 !important;
+        }
+
+        .stDateInput label {
+        color: black !important;
+        }
+
+        /* Adjust placeholder text color */
+        ::placeholder {
+        color: gray !important;
+        }
+
         /* Text inputs (black text + visible cursor) */
         .stTextInput input, .stNumberInput input, .stTextArea textarea {
         color: #000000 !important;
