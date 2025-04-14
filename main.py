@@ -12,15 +12,17 @@ def set_theme():
     st.markdown("""
     <style>
         
-        /* Fix black Submit button */
-        button[kind="primary"] {
+        /* Fix submit button in forms */
+        div.stButton > button {
         background-color: #4CAF50 !important;
         color: white !important;
         border-radius: 5px !important;
         border: none !important;
+        padding: 0.5em 1em !important;
         }
-        button[kind="primary"]:hover {
-        background-color: #45a049 !important;
+
+        div.stButton > button:hover {
+        background-color: #45a049 !important;
         }
 
         /* Fix black text in date picker */
