@@ -167,7 +167,9 @@ from google.oauth2.service_account import Credentials
 def connect_to_sheet():
     try:
         creds_info = st.secrets["google_service_account"]
-        creds = Credentials.from_service_account_info(creds_info)
+        scopes = ['https://googleapis.com/auth/spreadsheets',
+                  'https://googleapis.com/auth/drive']
+        creds = Credentials.from_service_account_info(creds_info, scopes=scopes)
         client = gspread.authorize(creds)
         return client.open("FuelTracker")
     except Exception as e:
