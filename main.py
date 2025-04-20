@@ -6,7 +6,7 @@ from streamlit import title
 
 
 
-def pinch_to_scroll():
+def pinch_to_zoom():
     st.markdown("""
 <style>
     .stDataFrame {
@@ -16,6 +16,9 @@ def pinch_to_scroll():
     }
 </style>
 """, unsafe_allow_html=True)
+    
+pinch_to_zoom():
+
 # Custom white/green theme
 def set_theme():
     st.markdown("""
