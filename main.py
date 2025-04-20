@@ -50,8 +50,8 @@ def login():
             users = sheet.worksheet("users").get_all_records()
             for u in users:
                 if u['username'].strip().lower() == username.strip().lower() and u['password'].strip() == password.strip():
-                    st.session_state.user = u
-                    st.experimental_rerun()
+                    st.session_state.user = user
+                    st.rerun()
             st.sidebar.error("Invalid credentials")
 
 # Manager view
