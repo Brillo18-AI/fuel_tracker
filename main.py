@@ -6,41 +6,30 @@ from google.oauth2.service_account import Credentials
 # Page config
 st.set_page_config(page_title="Fuel Tracker", layout="wide")
 
-# Inject viewport meta to enable mobile pinch-zoom
-components.html(
-    '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">',
-    height=0,
-)
+# Function to enable mobile zoom and add zoom slider
+def apply_zoom():
+    # Viewport meta for pinch-zoom support
+    st.markdown(
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">',
+        unsafe_allow_html=True
+    )
+    # Sidebar slider to adjust zoom percentage
+    zoom = st.sidebar.slider("Page Zoom (%)", min_value=50, max_value=200, value=100)
+    # Inject CSS for zoom
+    st.markdown(
+        f"""
+        <style>
+            html, body, .stApp, .stDataFrame, .stTable {{
+                zoom: {zoom}% !important;
+            }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    return zoom
 
-# Add a zoom slider to adjust overall scaling
-zoom_level = st.sidebar.slider("Page Zoom (%)", min_value=50, max_value=200, value=100)
-st.markdown(
-    f"""
-    <style>
-        html, body, .stApp, .stDataFrame, .stTable {{
-            zoom: {zoom_level}% !important;
-        }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Minimal CSS: make tables scrollable and enable pinch-zoom on mobile
-st.markdown(
-    """
-    <style>
-    /* Scrollable DataFrames */
-    .stDataFrame, .stTable {
-        max-width: 100% !important;
-        overflow-x: auto !important;
-    }
-
-    /* Allow pinch-zoom on mobile devices */
-    [data-testid="stAppViewContainer"] {
-        touch-action: pinch-zoom !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+# Apply zoom controls
+zoom_level = apply_zoom()
 
 # Google Sheets helper
 def connect_to_sheet():
