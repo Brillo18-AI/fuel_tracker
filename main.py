@@ -10,19 +10,41 @@ from streamlit import title
 # Custom white/green theme
 def set_theme():
     st.markdown("""
+    <style>
+    /* Enable zooming on all content */
+    body {
+    zoom: 1.0 !important;
+    -moz-transform: scale(1.0) !important;
+    -moz-transform-origin: 0 0 !important;
+    }
+    
+    /* Mobile-specific zoom */
+    @media (max-width: 768px) {
+    body {
+    touch-action: manipulation !important;
+    -webkit-text-size-adjust: 100% !important;
+    }
+    .stApp {
+    min-height: 100vh !important;
+    overflow: auto !important;
+    }
+    }
+</style>
+""", unsafe_allow_html=True)
+    st.markdown("""
 <style>
-    /* Target ALL buttons (primary color) */
-    button[kind="primary"], 
-    .stButton>button,
-    .stButton>button:focus,
-    .stButton>button:hover {
+       /* Target ALL buttons (primary color) */
+       button[kind="primary"], 
+       .stButton>button,
+       .stButton>button:focus,
+       .stButton>button:hover {
         background-color: #4CAF50 !important;
         color: white !important;
         border: none !important;
-    }
+        }
     
-    /* Specific form submit buttons */
-    div[data-testid="stFormSubmitButton"]>button {
+        /* Specific form submit buttons */
+        div[data-testid="stFormSubmitButton"]>button {
         background-color: #4CAF50 !important;
         border-radius: 8px !important;
         padding: 0.5rem 1rem !important;
