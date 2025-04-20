@@ -14,7 +14,7 @@ def apply_zoom():
         unsafe_allow_html=True
     )
     # Sidebar slider to adjust zoom percentage
-    zoom = st.slider("Page Zoom (%)", min_value=50, max_value=200, value=100)
+    zoom = st.slider("Page Zoom (%)", min_value=50, max_value=150, value=100)
     # Inject CSS for zoom
     st.markdown(
         f"""
