@@ -17,7 +17,7 @@ def pinch_to_zoom():
 </style>
 """, unsafe_allow_html=True)
     
-pinch_to_zoom():
+pinch_to_zoom()
 
 # Custom white/green theme
 def set_theme():
