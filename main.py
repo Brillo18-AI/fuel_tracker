@@ -26,10 +26,8 @@ def apply_zoom():
         """,
         unsafe_allow_html=True
     )
-    return zoom
+    return apply_zoom()
 
-# Apply zoom controls
-zoom_level = apply_zoom()
 
 # Google Sheets helper
 def connect_to_sheet():
@@ -96,6 +94,8 @@ def owner_view():
         st.write(f"Showing {len(filtered)} reports since {from_date}")
     else:
         st.error("Couldn't load data")
+    # Apply zoom controls here only
+    zoom_level = apply_zoom()    
 
 # Main flow
 
