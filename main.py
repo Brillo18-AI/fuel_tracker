@@ -1,3 +1,80 @@
+st.markdown("""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+</head>
+</html>
+<style>
+    /* Nuclear option to enable zoom */
+    html {
+        touch-action: manipulation;
+        -webkit-text-size-adjust: 100%;
+    }
+    body {
+        zoom: 100% !important;
+        transform: scale(1) !important;
+        transform-origin: top left !important;
+        overflow: auto !important;
+    }
+    /* Make ALL content zoomable */
+    .stApp, .stDataFrame, .stTable, div[data-testid] {
+        zoom: 100% !important;
+        transform: scale(1) !important;
+    }
+</style>
+""", unsafe_allow_html=True)st.markdown("""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+</head>
+</html>
+<style>
+    /* Nuclear option to enable zoom */
+    html {
+        touch-action: manipulation;
+        -webkit-text-size-adjust: 100%;
+    }
+    body {
+        zoom: 100% !important;
+        transform: scale(1) !important;
+        transform-origin: top left !important;
+        overflow: auto !important;
+    }
+    /* Make ALL content zoomable */
+    .stApp, .stDataFrame, .stTable, div[data-testid] {
+        zoom: 100% !important;
+        transform: scale(1) !important;
+    }
+</style>
+""", unsafe_allow_html=True)st.markdown("""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+</head>
+</html>
+<style>
+    /* Nuclear option to enable zoom */
+    html {
+        touch-action: manipulation;
+        -webkit-text-size-adjust: 100%;
+    }
+    body {
+        zoom: 100% !important;
+        transform: scale(1) !important;
+        transform-origin: top left !important;
+        overflow: auto !important;
+    }
+    /* Make ALL content zoomable */
+    .stApp, .stDataFrame, .stTable, div[data-testid] {
+        zoom: 100% !important;
+        transform: scale(1) !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # main.py
 import streamlit as st
 from datetime import datetime
