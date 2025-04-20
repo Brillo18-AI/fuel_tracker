@@ -50,7 +50,9 @@ st.markdown("""
         transform: scale(1) !important;
     }
 </style>
-""", unsafe_allow_html=True)st.markdown("""
+""", unsafe_allow_html=True)
+
+st.markdown("""
 <!DOCTYPE html>
 <html>
 <head>
