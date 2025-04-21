@@ -125,6 +125,7 @@ def owner_view():
     else:
         st.error("Couldn't load data.")
 
+    st.write("Available columns in DataFrame:", df.columns.tolist())    
     apply_zoom()
 # Main flow
 
