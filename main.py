@@ -120,21 +120,22 @@ def owner_view():
 
         
         tanks = station_df['fuel_type'].unique()
-            for tank in tanks:
-                st.markdown(f"**Tank: {tank}**")
-                tank_df = station_df[station_df['tank_no'] == tank]
+        for tank in tanks:
+            st.markdown(f"**Tank: {tank}**")
+            tank_df = station_df[station_df['tank_no'] == tank]
                
-                display_df = tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance']].copy()
-                # Format numeric columns with comma separation
-                for col in ['opening', 'recieved', 'sales', 'closing', 'balance']:
-                    display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
+            display_df = tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance']].copy()
+            # Format numeric columns with comma separation
+            for col in ['opening', 'recieved', 'sales', 'closing', 'balance']:
+            display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
 
-                st.dataframe(
-                display_df.sort_values('date').reset_index(drop=True)
-                )
+            st.dataframe(
+            display_df.sort_values('date').reset_index(drop=True)
+            )
+            
 
 
-                st.write("---")
+            st.write("---")
     else:
         st.error("Couldn't load data.")
         
