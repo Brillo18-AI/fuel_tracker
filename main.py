@@ -135,7 +135,7 @@ def main():
     else:
         if st.sidebar.button("Logout"):
             del st.session_state.user
-            st.experimental_rerun()
+            st.rerun()
         if st.session_state.user['role'] == 'manager':
             manager_view(st.session_state.user['station_id'])
         else:
