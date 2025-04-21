@@ -3,6 +3,7 @@ from datetime import datetime
 import gspread
 import pandas as pd
 from google.oauth2.service_account import Credentials
+st.cache_data.clear()
 
 # Page config
 st.set_page_config(page_title="Fuel Tracker", layout="wide")
@@ -124,7 +125,7 @@ def owner_view():
                 st.write("---")
     else:
         st.error("Couldn't load data.")
-
+    df = pd.DataFrame(records)
     st.write("Available columns in DataFrame:", df.columns.tolist())    
     apply_zoom()
 # Main flow
