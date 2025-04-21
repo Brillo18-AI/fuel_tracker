@@ -106,20 +106,20 @@ def owner_view():
     if sheet:
         records = sheet.worksheet("daily_reports").get_all_records()
         df = pd.DataFrame(records)
+        
         df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
         from_date = st.date_input("From date", datetime.now())
         df = df[df['date'] >= pd.to_datetime(from_date)]
-        # Selectbox will automatically support scrolling
+        
+        # Get unique stations and allow owner to select one
         stations = df['station_id'].unique()
         station_selected = st.selectbox("Select a station", stations)
 
-        # Filter data for the selected station
+        # Filter only the selected station
         station_df = df[df['station_id'] == station_selected]
-        stations = df['station_id'].unique()
-        for station in stations:
-            st.subheader(f"Station {station}")
-            station_df = df[df['station_id'] == station]
-            tanks = station_df['tank_no'].unique()
+
+        
+        tanks = station_df['fuel_type'].unique()
             for tank in tanks:
                 st.markdown(f"**Tank: {tank}**")
                 tank_df = station_df[station_df['tank_no'] == tank]
