@@ -118,7 +118,7 @@ def owner_view():
                 st.markdown(f"**Tank: {tank}**")
                 tank_df = station_df[station_df['fuel_type'] == tank]
                
-                display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance']].copy()
+                display_df = tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance']].copy()
                 # Format numeric columns with comma separation
                 for col in ['opening', 'recieved', 'sales', 'closing', 'balance']:
                     display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
