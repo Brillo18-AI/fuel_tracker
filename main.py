@@ -106,7 +106,6 @@ def owner_view():
     if sheet:
         records = sheet.worksheet("daily_reports").get_all_records()
         df = pd.DataFrame(records)
-        st.write("Available columns in DataFrame:", df.columns.tolist())
         df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
         from_date = st.date_input("From date", datetime.now())
         df = df[df['date'] >= pd.to_datetime(from_date)]
@@ -119,7 +118,7 @@ def owner_view():
                 st.markdown(f"**Tank: {tank}**")
                 tank_df = station_df[station_df['fuel_type'] == tank]
                 st.dataframe(
-                    tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance']]
+                    tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance']]
                         .sort_values('date')
                         .reset_index(drop=True)
                 )
