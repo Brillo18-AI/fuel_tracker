@@ -119,10 +119,10 @@ def owner_view():
         for station in stations:
             st.subheader(f"Station {station}")
             station_df = df[df['station_id'] == station]
-            tanks = station_df['fuel_type'].unique()
+            tanks = station_df['tank_no'].unique()
             for tank in tanks:
                 st.markdown(f"**Tank: {tank}**")
-                tank_df = station_df[station_df['fuel_type'] == tank]
+                tank_df = station_df[station_df['tank_no'] == tank]
                
                 display_df = tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance']].copy()
                 # Format numeric columns with comma separation
