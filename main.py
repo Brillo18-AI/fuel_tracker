@@ -106,6 +106,7 @@ def owner_view():
     if sheet:
         records = sheet.worksheet("daily_reports").get_all_records()
         df = pd.DataFrame(records)
+        st.write("Available columns in DataFrame:", df.columns.tolist())
         df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
         from_date = st.date_input("From date", datetime.now())
         df = df[df['date'] >= pd.to_datetime(from_date)]
@@ -125,8 +126,7 @@ def owner_view():
                 st.write("---")
     else:
         st.error("Couldn't load data.")
-    df = pd.DataFrame(records)
-    st.write("Available columns in DataFrame:", df.columns.tolist())    
+        
     apply_zoom()
 # Main flow
 
