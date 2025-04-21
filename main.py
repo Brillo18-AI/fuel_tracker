@@ -119,7 +119,7 @@ def owner_view():
         station_df = df[df['station_id'] == station_selected]
 
         
-        tanks = station_df['fuel_type'].unique()
+        tanks = station_df['tank_no'].unique()
         for tank in tanks:
             st.markdown(f"**Tank: {tank}**")
             tank_df = station_df[station_df['tank_no'] == tank]
@@ -130,7 +130,7 @@ def owner_view():
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
 
             st.dataframe(
-            display_df.sort_values('date').reset_index(drop=True)
+                display_df.sort_values('date').reset_index(drop=True)
             )
             
 
