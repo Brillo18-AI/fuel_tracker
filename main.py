@@ -121,11 +121,11 @@ def owner_view():
                 display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance']].copy()
                 # Format numeric columns with comma separation
                 for col in ['opening', 'received', 'sales', 'closing', 'balance']:
-                display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
+                    display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
 
-                st.dataframe(
-                display_df.sort_values('date').reset_index(drop=True)
-                )
+                    st.dataframe(
+                    display_df.sort_values('date').reset_index(drop=True)
+                    )
 
 
                 st.write("---")
