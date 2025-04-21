@@ -117,11 +117,17 @@ def owner_view():
             for tank in tanks:
                 st.markdown(f"**Tank: {tank}**")
                 tank_df = station_df[station_df['fuel_type'] == tank]
+               
+                display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance']].copy()
+                # Format numeric columns with comma separation
+                for col in ['opening', 'received', 'sales', 'closing', 'balance']:
+                display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
+
                 st.dataframe(
-                    tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance']]
-                        .sort_values('date')
-                        .reset_index(drop=True)
+                display_df.sort_values('date').reset_index(drop=True)
                 )
+
+
                 st.write("---")
     else:
         st.error("Couldn't load data.")
