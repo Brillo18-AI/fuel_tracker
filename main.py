@@ -109,6 +109,12 @@ def owner_view():
         df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
         from_date = st.date_input("From date", datetime.now())
         df = df[df['date'] >= pd.to_datetime(from_date)]
+        # Selectbox will automatically support scrolling
+        stations = df['station_id'].unique()
+        station_selected = st.selectbox("Select a station", stations)
+
+        # Filter data for the selected station
+        station_df = df[df['station_id'] == station_selected]
         stations = df['station_id'].unique()
         for station in stations:
             st.subheader(f"Station {station}")
