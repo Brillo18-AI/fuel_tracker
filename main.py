@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime
 import gspread
+import pandas as pd
 from google.oauth2.service_account import Credentials
 
 # Page config
@@ -60,43 +61,72 @@ def login():
                     st.rerun()
             st.sidebar.error("Invalid credentials")
 
-# Manager view
 
+# Manager view with inputs for four tanks
 def manager_view(station_id):
     st.title(f"Station {station_id} Daily Report")
-    with st.form("report_form"):
+    # List of four tanks per station
+    tanks = ["Tank 1", "Tank 2", "Tank 3", "Tank 4"]
+    with st.form(key="report_form"):
         date = st.date_input("Date", datetime.now())
-        fuel = st.selectbox("Fuel Type", ["Petrol", "Diesel"])
-        opening = st.number_input("Opening Stock (L)", min_value=0)
-        received = st.number_input("Received Today (L)", min_value=0)
-        sales = st.number_input("Sales (L)", min_value=0)
-        closing = st.number_input("Closing Stock (L)", min_value=0)
-        if st.form_submit_button("Submit"):
+        # Collect inputs per tank
+        tank_data = {}
+        for tank in tanks:
+            st.subheader(tank)
+            opening = st.number_input(f"{tank} Opening Stock (L)", min_value=0, key=f"{tank}_opening")
+            received = st.number_input(f"{tank} Received Today (L)", min_value=0, key=f"{tank}_received")
+            sales = st.number_input(f"{tank} Sales (L)", min_value=0, key=f"{tank}_sales")
+            closing = st.number_input(f"{tank} Closing Stock (L)", min_value=0, key=f"{tank}_closing")
+            tank_data[tank] = {
+                "opening": opening,
+                "received": received,
+                "sales": sales,
+                "closing": closing
+            }
+        if st.form_submit_button("Submit Report"):
             sheet = connect_to_sheet()
             if sheet:
-                rpt = sheet.worksheet("daily_reports")
-                balance = opening + received - sales
-                rpt.append_row([str(date), station_id, fuel, opening, received, sales, closing, balance])
-                st.success("Report submitted!")
+                ws = sheet.worksheet("daily_reports")
+                for tank, data in tank_data.items():
+                    balance = data['opening'] + data['received'] - data['sales']
+                    ws.append_row([
+                        date.strftime("%Y-%m-%d"), station_id,
+                        tank,
+                        data['opening'], data['received'],
+                        data['sales'], data['closing'], balance
+                    ])
+                st.success("All tank reports submitted successfully!")
             else:
-                st.error("Failed to save report")
+                st.error("Failed to save reports.")
 
-# Owner view
-
+# Owner view (with zoom control)
 def owner_view():
     st.title("All Stations Dashboard")
     sheet = connect_to_sheet()
     if sheet:
-        recs = sheet.worksheet("daily_reports").get_all_records()
+        records = sheet.worksheet("daily_reports").get_all_records()
+        df = pd.DataFrame(records)
+        df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
         from_date = st.date_input("From date", datetime.now())
-        filtered = [r for r in recs if datetime.strptime(r['date'], "%Y-%m-%d").date() >= from_date]
-        st.dataframe(filtered)
-        st.write(f"Showing {len(filtered)} reports since {from_date}")
+        df = df[df['date'] >= pd.to_datetime(from_date)]
+        stations = df['station_id'].unique()
+        for station in stations:
+            st.subheader(f"Station {station}")
+            station_df = df[df['station_id'] == station]
+            tanks = station_df['fuel_type'].unique()
+            for tank in tanks:
+                st.markdown(f"**Tank: {tank}**")
+                tank_df = station_df[station_df['fuel_type'] == tank]
+                st.dataframe(
+                    tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance']]
+                        .sort_values('date')
+                        .reset_index(drop=True)
+                )
+                st.write("---")
     else:
-        st.error("Couldn't load data")
-    # Apply zoom controls here only
-    zoom_level = apply_zoom()    
+        st.error("Couldn't load data.")
 
+    apply_zoom()
 # Main flow
 
 def main():
