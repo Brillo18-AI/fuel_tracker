@@ -121,7 +121,7 @@ def owner_view():
         
         tanks = station_df['tank_no'].unique()
         for tank in tanks:
-            st.markdown(f"**Tank: {tank}**")
+            st.markdown(f"** {tank}**")
             tank_df = station_df[station_df['tank_no'] == tank]
                
             display_df = tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance']].copy()
