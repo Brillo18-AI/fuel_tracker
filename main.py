@@ -27,7 +27,6 @@ def apply_zoom():
         """,
         unsafe_allow_html=True
     )
-    return apply_zoom()
 
 
 # Google Sheets helper
