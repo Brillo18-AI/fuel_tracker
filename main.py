@@ -100,6 +100,8 @@ def manager_view(station_id):
                 "sales": sales,
                 "closing": closing
             }
+        st.write("Columns in tank_df:", tank_df.columns.tolist())
+    
         if st.form_submit_button("Submit Report"):
             sheet = connect_to_sheet()
             if sheet:
