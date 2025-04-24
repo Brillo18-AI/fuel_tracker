@@ -90,13 +90,13 @@ def manager_view(station_id):
         for tank in tanks:
             st.subheader(tank)
             opening = formatted_number_input(f"{tank} Opening Stock (L)", f"{tank}_opening")
-            received = formatted_number_input(f"{tank} Received Today (L)", f"{tank}_received")
+            recieved = formatted_number_input(f"{tank} Recieved Today (L)", f"{tank}_recieved")
             sales = formatted_number_input(f"{tank} Sales (L)", f"{tank}_sales")
             closing = formatted_number_input(f"{tank} Closing Stock (L)", f"{tank}_closing")
 
             tank_data[tank] = {
                 "opening": opening,
-                "received": received,
+                "recieved": recieved,
                 "sales": sales,
                 "closing": closing
             }
@@ -105,14 +105,14 @@ def manager_view(station_id):
             if sheet:
                 ws = sheet.worksheet("daily_reports")
                 for tank, data in tank_data.items():
-                    balance = data['opening'] + data['received'] - data['sales']
+                    balance = data['opening'] + data['recieved'] - data['sales']
                     revenue = price_per_liter * data['sales']
                     ws.append_row([
                         date.strftime("%Y-%m-%d"),
                         station_id,
                         tank,
                         data['opening'],
-                        data['received'],
+                        data['recieved'],
                         data['sales'], 
                         data['closing'],
                         balance, 
