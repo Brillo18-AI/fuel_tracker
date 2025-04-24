@@ -65,6 +65,7 @@ def login():
 # Manager view with inputs for four tanks
 def manager_view(station_id):
     st.title(f"Station {station_id} Daily Report")
+    price = st.number.input(f"{tank} Price per Liter (₦)", min_value=0.0, step=0.1, key=f"{tank}_price")
     # List of four tanks per station
     tanks = ["Tank 1", "Tank 2", "Tank 3", "Tank 4"]
     with st.form(key="report_form"):
@@ -81,7 +82,8 @@ def manager_view(station_id):
                 "opening": opening,
                 "received": received,
                 "sales": sales,
-                "closing": closing
+                "closing": closing,
+                "price per liter": price
             }
         if st.form_submit_button("Submit Report"):
             sheet = connect_to_sheet()
@@ -89,11 +91,12 @@ def manager_view(station_id):
                 ws = sheet.worksheet("daily_reports")
                 for tank, data in tank_data.items():
                     balance = data['opening'] + data['received'] - data['sales']
+                    revenue = data['sales'] * data['price']
                     ws.append_row([
                         date.strftime("%Y-%m-%d"), station_id,
                         tank,
                         data['opening'], data['received'],
-                        data['sales'], data['closing'], balance
+                        data['sales'], data['closing'], balance, data['price'], revenue
                     ])
                 st.success("All tank reports submitted successfully!")
             else:
@@ -124,10 +127,12 @@ def owner_view():
             st.markdown(f" {tank}")
             tank_df = station_df[station_df['tank_no'] == tank]
                
-            display_df = tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance']].copy()
+            display_df = tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance', 'revenue']].copy()
             # Format numeric columns with comma separation
             for col in ['opening', 'recieved', 'sales', 'closing', 'balance']:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
+            for col in ['price', 'revenue']
+                display_df[col] = display_df[col].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
 
             st.dataframe(
                 display_df.sort_values('date').reset_index(drop=True)
