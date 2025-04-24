@@ -8,6 +8,17 @@ st.cache_data.clear()
 # Page config
 st.set_page_config(page_title="Fuel Tracker", layout="wide")
 
+# Custom formatting for manager input
+def formatted_number_input(label, key, default=0):
+    raw = st.text_input(label, value=f"{default:,}", key=key)
+    try:
+        return int(raw.replace(",", ""))
+    except ValueError:
+        st.warning("Please enter a valid number")
+        return 0
+
+
+
 # Function to enable mobile zoom and add zoom slider
 def apply_zoom():
     # Viewport meta for pinch-zoom support
@@ -75,10 +86,11 @@ def manager_view(station_id):
         tank_data = {}
         for tank in tanks:
             st.subheader(tank)
-            opening = st.number_input(f"{tank} Opening Stock (L)", min_value=0, key=f"{tank}_opening")
-            received = st.number_input(f"{tank} Received Today (L)", min_value=0, key=f"{tank}_received")
-            sales = st.number_input(f"{tank} Sales (L)", min_value=0, key=f"{tank}_sales")
-            closing = st.number_input(f"{tank} Closing Stock (L)", min_value=0, key=f"{tank}_closing")
+            opening = formatted_number_input(f"{tank} Opening Stock (L)", f"{tank}_opening")
+            received = formatted_number_input(f"{tank} Received Today (L)", f"{tank}_received")
+            sales = formatted_number_input(f"{tank} Sales (L)", f"{tank}_sales")
+            closing = formatted_number_input(f"{tank} Closing Stock (L)", f"{tank}_closing")
+
             tank_data[tank] = {
                 "opening": opening,
                 "received": received,
