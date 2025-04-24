@@ -79,7 +79,7 @@ def manager_view(station_id):
             received = st.number_input(f"{tank} Received Today (L)", min_value=0, key=f"{tank}_received")
             sales = st.number_input(f"{tank} Sales (L)", min_value=0, key=f"{tank}_sales")
             closing = st.number_input(f"{tank} Closing Stock (L)", min_value=0, key=f"{tank}_closing")
-            revenue = price_per_liter * data['sales']
+
             tank_data[tank] = {
                 "opening": opening,
                 "received": received,
@@ -92,6 +92,7 @@ def manager_view(station_id):
                 ws = sheet.worksheet("daily_reports")
                 for tank, data in tank_data.items():
                     balance = data['opening'] + data['received'] - data['sales']
+                    revenue = price_per_liter * data['sales']
                     ws.append_row([
                         date.strftime("%Y-%m-%d"),
                         station_id,
