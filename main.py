@@ -79,7 +79,6 @@ def manager_view(station_id):
             received = st.number_input(f"{tank} Received Today (L)", min_value=0, key=f"{tank}_received")
             sales = st.number_input(f"{tank} Sales (L)", min_value=0, key=f"{tank}_sales")
             closing = st.number_input(f"{tank} Closing Stock (L)", min_value=0, key=f"{tank}_closing")
-
             tank_data[tank] = {
                 "opening": opening,
                 "received": received,
