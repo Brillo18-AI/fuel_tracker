@@ -134,7 +134,7 @@ def owner_view():
             # Format numeric columns with comma separation
             for col in ['opening', 'recieved', 'sales', 'closing', 'balance']:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
-            for col in ['price', 'revenue']
+            for col in ['price', 'revenue']:
                 display_df[col] = display_df[col].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
 
             st.dataframe(
