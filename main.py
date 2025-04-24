@@ -149,14 +149,27 @@ def owner_view():
         for tank in tanks:
             st.markdown(f" {tank}")
             tank_df = station_df[station_df['tank_no'] == tank]
+            # Check if 'price per liter' exists and add it to display_df
+            if 'price per liter' in tank_df.columns:
+                price_per_liter_column = 'price per liter'
+            else:
+                price_per_liter_column = None  # or you can set a default value
+
+            # Now include 'price per liter' column dynamically
+            columns_to_display = ['date', 'opening', 'received', 'sales', 'closing', 'balance', 'revenue']
+            if price_per_liter_column:
+                columns_to_display.append(price_per_liter_column) 
                
             display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance', 'revenue', 'price per liter' ]].copy()
             # Format numeric columns with comma separation
             for col in ['opening', 'received', 'sales', 'closing', 'balance']:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
-            for col in ['price per liter', 'revenue']:
-                display_df[col] = display_df[col].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
+            # Format 'price per liter' and 'revenue' columns with ₦ symbol
+            if price_per_liter_column:
+                display_df[price_per_liter_column] = display_df[price_per_liter_column].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
+            display_df['revenue'] = display_df['revenue'].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
 
+            # display dataframe
             st.dataframe(
                 display_df.sort_values('date').reset_index(drop=True)
             )
