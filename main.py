@@ -10,12 +10,15 @@ st.set_page_config(page_title="Fuel Tracker", layout="wide")
 
 # Custom formatting for manager input
 def formatted_number_input(label, key, default=0):
-    raw = st.text_input(label, value=f"{default:,}", key=key)
+    raw = st.text_input(label, value=str(default), key=key)
     try:
-        return int(raw.replace(",", ""))
+        value = int(raw.replace(",", "").strip())
+        st.caption(f"↳ {value:,} liters")  # This shows the formatted value below the input
+        return value
     except ValueError:
         st.warning("Please enter a valid number")
         return 0
+
 
 
 
