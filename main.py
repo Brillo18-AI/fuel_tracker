@@ -65,7 +65,8 @@ def login():
 # Manager view with inputs for four tanks
 def manager_view(station_id):
     st.title(f"Station {station_id} Daily Report")
-    price_per_liter = st.number.input("Price per Liter (₦)", min_value=0.0, format="%.2f")
+    price_per_liter = st.number_input("Price per Liter (₦)", min_value=0.0, format="%.2f")
+    revenue = price_per_liter * data['sales']
     # List of four tanks per station
     tanks = ["Tank 1", "Tank 2", "Tank 3", "Tank 4"]
     with st.form(key="report_form"):
@@ -100,6 +101,7 @@ def manager_view(station_id):
                         data['closing'],
                         balance, 
                         price_per_liter, 
+                        revenue
                     ])
                 st.success("All tank reports submitted successfully!")
             else:
