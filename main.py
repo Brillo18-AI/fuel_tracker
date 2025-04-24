@@ -105,7 +105,7 @@ def manager_view(station_id):
             if sheet:
                 ws = sheet.worksheet("daily_reports")
                 for tank, data in tank_data.items():
-                    balance = data['opening'] + data['recieved'] - data['sales']
+                    balance = data['opening'] + data['received'] - data['sales']
                     revenue = price_per_liter * data['sales']
                     ws.append_row([
                         date.strftime("%Y-%m-%d"),
