@@ -165,10 +165,7 @@ def owner_view():
             # Format numeric columns with comma separation
             for col in ['opening', 'received', 'sales', 'closing', 'balance']:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
-            # Format 'price per liter' and 'revenue' columns with ₦ symbol
-            if price_per_liter_column:
-                display_df[price_per_liter_column] = display_df[price_per_liter_column].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
-            display_df['revenue'] = display_df['revenue'].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
+
 
             # display dataframe
             st.dataframe(
