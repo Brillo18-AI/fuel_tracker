@@ -65,7 +65,7 @@ def login():
 # Manager view with inputs for four tanks
 def manager_view(station_id):
     st.title(f"Station {station_id} Daily Report")
-    price = st.number.input(f"{tank} Price per Liter (₦)", min_value=0.0, step=0.1, key=f"{tank}_price")
+    price_per_liter = st.number.input("Price per Liter (₦)", min_value=0.0, format="%.2f")
     # List of four tanks per station
     tanks = ["Tank 1", "Tank 2", "Tank 3", "Tank 4"]
     with st.form(key="report_form"):
@@ -82,8 +82,7 @@ def manager_view(station_id):
                 "opening": opening,
                 "received": received,
                 "sales": sales,
-                "closing": closing,
-                "price per liter": price
+                "closing": closing
             }
         if st.form_submit_button("Submit Report"):
             sheet = connect_to_sheet()
@@ -91,12 +90,16 @@ def manager_view(station_id):
                 ws = sheet.worksheet("daily_reports")
                 for tank, data in tank_data.items():
                     balance = data['opening'] + data['received'] - data['sales']
-                    revenue = data['sales'] * data['price']
                     ws.append_row([
-                        date.strftime("%Y-%m-%d"), station_id,
+                        date.strftime("%Y-%m-%d"),
+                        station_id,
                         tank,
-                        data['opening'], data['received'],
-                        data['sales'], data['closing'], balance, data['price'], revenue
+                        data['opening'],
+                        data['received'],
+                        data['sales'], 
+                        data['closing'],
+                        balance, 
+                        price_per_liter, 
                     ])
                 st.success("All tank reports submitted successfully!")
             else:
