@@ -149,43 +149,19 @@ def owner_view():
         for tank in tanks:
             st.markdown(f" {tank}")
             tank_df = station_df[station_df['tank_no'] == tank]
-            # Check if 'price per liter' exists and add it to display_df
-            if 'price per liter' in tank_df.columns:
-                price_per_liter_column = 'price per liter'
-            else:
-                price_per_liter_column = None  # or you can set a default value
+            # Initialize display_df with required columns
+            display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance', 'revenue', 'price per liter']].copy()
+
+            # Format 'price per liter' with ₦ symbol
+            if 'price per liter' in display_df.columns:
+                display_df['price per liter'] = display_df['price per liter'].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
+            
+            # Format 'revenue' with ₦ symbol
+            display_df['revenue'] = display_df['revenue'].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
 
 
-            #  List all possible column names (including variations)
-            possible_columns = {
-                'date': ['date', 'Date'],
-                'opening': ['opening', 'opening_stock', 'opening stock'],
-                'received': ['received', 'received_today', 'received today'],
-                'sales': ['sales', 'sales_liters', 'sales liters'],
-                'closing': ['closing', 'closing_stock', 'closing stock'],
-                'balance': ['balance', 'calc_balance', 'calculated balance'],
-                'revenue': ['revenue', 'total_revenue', 'total revenue'],
-                'price_per_liter': ['price per liter', 'price_per_liter', 'price', 'ppl']
-                }
 
-            # Find which columns actually exist in the DataFrame
-            available_columns = []
-            for col_group in possible_columns.values():
-                for col in col_group:
-                    if col in tank_df.columns:
-                        available_columns.append(col)
-                        break
 
-                          # Create display_df with only available columns
-            display_df = tank_df[available_columns].copy()
-
-            # Rename columns to standard names for display
-            column_rename = {}
-            for standard_name, variants in possible_columns.items():
-                for variant in variants:
-                    if variant in display_df.columns:
-                        column_rename[variant] = standard_name.replace('_', ' ').title()
-                        display_df = display_df.rename(columns=column_rename)
             # Format numeric columns with comma separation
             for col in ['opening', 'received', 'sales', 'closing', 'balance']:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
