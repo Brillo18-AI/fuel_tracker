@@ -166,7 +166,6 @@ def owner_view():
             for col in ['opening', 'received', 'sales', 'closing', 'balance']:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
 
-
             # display dataframe
             st.dataframe(
                 display_df.sort_values('date').reset_index(drop=True)
