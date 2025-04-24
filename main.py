@@ -170,11 +170,11 @@ def owner_view():
 
             # Find which columns actually exist in the DataFrame
             available_columns = []
-                for col_group in possible_columns.values():
-                    for col in col_group:
-                        if col in tank_df.columns:
-                            available_columns.append(col)
-                            break
+            for col_group in possible_columns.values():
+                for col in col_group:
+                    if col in tank_df.columns:
+                        available_columns.append(col)
+                        break
 
                           # Create display_df with only available columns
             display_df = tank_df[available_columns].copy()
