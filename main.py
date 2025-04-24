@@ -100,7 +100,7 @@ def manager_view(station_id):
                 "sales": sales,
                 "closing": closing
             }
-        st.write("Columns in tank_df:", tank_df.columns.tolist())
+        
     
         if st.form_submit_button("Submit Report"):
             sheet = connect_to_sheet()
@@ -150,11 +150,11 @@ def owner_view():
             st.markdown(f" {tank}")
             tank_df = station_df[station_df['tank_no'] == tank]
                
-            display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance', 'revenue']].copy()
+            display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance', 'revenue', 'price per liter' ]].copy()
             # Format numeric columns with comma separation
             for col in ['opening', 'received', 'sales', 'closing', 'balance']:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
-            for col in ['price', 'revenue']:
+            for col in ['price per liter', 'revenue']:
                 display_df[col] = display_df[col].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
 
             st.dataframe(
