@@ -90,13 +90,13 @@ def manager_view(station_id):
         for tank in tanks:
             st.subheader(tank)
             opening = formatted_number_input(f"{tank} Opening Stock (L)", f"{tank}_opening")
-            recieved = formatted_number_input(f"{tank} Recieved Today (L)", f"{tank}_recieved")
+            received = formatted_number_input(f"{tank} Received Today (L)", f"{tank}_received")
             sales = formatted_number_input(f"{tank} Sales (L)", f"{tank}_sales")
             closing = formatted_number_input(f"{tank} Closing Stock (L)", f"{tank}_closing")
 
             tank_data[tank] = {
                 "opening": opening,
-                "recieved": recieved,
+                "received": received,
                 "sales": sales,
                 "closing": closing
             }
@@ -112,7 +112,7 @@ def manager_view(station_id):
                         station_id,
                         tank,
                         data['opening'],
-                        data['recieved'],
+                        data['received'],
                         data['sales'], 
                         data['closing'],
                         balance, 
@@ -148,9 +148,9 @@ def owner_view():
             st.markdown(f" {tank}")
             tank_df = station_df[station_df['tank_no'] == tank]
                
-            display_df = tank_df[['date', 'opening', 'recieved', 'sales', 'closing', 'balance', 'revenue']].copy()
+            display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance', 'revenue']].copy()
             # Format numeric columns with comma separation
-            for col in ['opening', 'recieved', 'sales', 'closing', 'balance']:
+            for col in ['opening', 'received', 'sales', 'closing', 'balance']:
                 display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
             for col in ['price', 'revenue']:
                 display_df[col] = display_df[col].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
