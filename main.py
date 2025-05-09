@@ -157,12 +157,27 @@ def owner_view():
     try:
         records = sheet.worksheet("pump_reports").get_all_records()
         if not records:
-           st.info("No reports available yet.")
-           return
+            st.info("No reports available yet.")
+            return
+
+    df = pd.DataFrame(records)
+
+    if "date" not in df.columns:
+        st.error("⚠️ 'date' column missing from data.")
+        st.write("DEBUG columns:", df.columns.tolist())
+        return
+
+    df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+    if df['date'].isnull().all():
+        st.error("⚠️ All 'date' values could not be parsed.")
+        st.dataframe(df)
+        return
 
     except Exception as e:
-        st.error(f"Failed to fetch reports: {e}")
+        st.error(f"Failed to fetch or process reports: {e}")
         return
+
 
     df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")  # Now safe to use df
 
