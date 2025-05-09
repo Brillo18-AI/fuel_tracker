@@ -80,49 +80,65 @@ def login():
 def manager_view(station_id):
     st.title("Daily Pump Report")
 
+    # 1. Station name
     st.markdown(f"### Station: **{station_id}**")
-    date = st.date_input("Date", datetime.now())
 
-    tanks = ["Tank 1", "Tank 2", "Tank 3", "Tank 4"]
-    pumps = ["Pump A", "Pump B", "Pump C", "Pump D"]
+    with st.form(key="pump_report_form"):
+        # 2. Date
+        date = st.date_input("Date", datetime.now())
 
-    selected_tank = st.selectbox("Select Tank", tanks)
-    selected_pump = st.selectbox("Select Pump", pumps)
+        # 3. Dropdowns
+        tanks = ["Tank 1", "Tank 2", "Tank 3", "Tank 4"]
+        pumps = ["Pump A", "Pump B", "Pump C", "Pump D"]
 
-    price_per_liter = st.number_input("Price per Liter (₦)", min_value=0.0, format="%.2f")
+        selected_tank = st.selectbox("Select Tank", tanks)
+        selected_pump = st.selectbox("Select Pump", pumps)
 
-    open_meter = st.number_input("Open Meter Reading", min_value=0.0, format="%.2f")
-    close_meter = st.number_input("Close Meter Reading", min_value=open_meter, format="%.2f")
+        # 4. Price
+        price_per_liter = st.number_input("Price per Liter (₦)", min_value=0.0, format="%.2f")
 
-    expected_liters = st.number_input("Expected Liters (or auto-calc)", value=close_meter - open_meter, format="%.2f")
-    expected_cash = st.number_input("Expected Cash (₦)", value=expected_liters * price_per_liter, format="%.2f")
+        # 5. Meter readings
+        open_meter = st.number_input("Open Meter Reading", min_value=0.0, format="%.2f")
+        close_meter = st.number_input("Close Meter Reading", min_value=open_meter, format="%.2f")
 
-    expenses = st.number_input("Expenses (₦)", min_value=0.0, format="%.2f")
-    cash_at_hand = st.number_input("Cash at Hand (₦)", min_value=0.0, format="%.2f")
+        # 6. Expected Liters & Cash
+        auto_liters = close_meter - open_meter
+        auto_cash = auto_liters * price_per_liter
 
-    if st.button("Submit Report"):
-        sheet = connect_to_sheet()
-        if sheet:
-            try:
-                ws = sheet.worksheet("pump_reports")
-                ws.append_row([
-                    date.strftime("%Y-%m-%d"),
-                    station_id,
-                    selected_tank,
-                    selected_pump,
-                    price_per_liter,
-                    open_meter,
-                    close_meter,
-                    expected_liters,
-                    expected_cash,
-                    expenses,
-                    cash_at_hand
-                ])
-                st.success("Pump report submitted successfully!")
-            except Exception as e:
-                st.error(f"Failed to save report: {e}")
-        else:
-            st.error("Google Sheet connection failed.")
+        expected_liters = st.number_input("Expected Liters", value=auto_liters, format="%.2f")
+        expected_cash = st.number_input("Expected Cash (₦)", value=auto_cash, format="%.2f")
+
+        # 7. Expenses & Cash at hand
+        expenses = st.number_input("Expenses (₦)", min_value=0.0, format="%.2f")
+        cash_at_hand = st.number_input("Cash at Hand (₦)", min_value=0.0, format="%.2f")
+
+        # 8. Submit
+        submitted = st.form_submit_button("Submit Report")
+
+        if submitted:
+            sheet = connect_to_sheet()
+            if sheet:
+                try:
+                    ws = sheet.worksheet("pump_reports")
+                    ws.append_row([
+                        date.strftime("%Y-%m-%d"),
+                        station_id,
+                        selected_tank,
+                        selected_pump,
+                        price_per_liter,
+                        open_meter,
+                        close_meter,
+                        expected_liters,
+                        expected_cash,
+                        expenses,
+                        cash_at_hand
+                    ])
+                    st.success("Pump report submitted successfully!")
+                except Exception as e:
+                    st.error(f"Failed to save report: {e}")
+            else:
+                st.error("Google Sheet connection failed.")
+
 
 
 # Owner view (with zoom control)
