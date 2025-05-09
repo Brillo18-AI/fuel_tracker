@@ -172,12 +172,14 @@ def owner_view():
 
     # 4. Station selector
     stations = df['station_id'].unique()
+    
     if len(stations) == 0:
         st.warning("No stations found in data.")
         return
 
     selected_station = st.selectbox("Select Station", stations)
-    df = df[df['station_id'] == selected_station]
+    station_df = df[df['station_id'] == station_selected]
+
 
     if df.empty:
         st.info("No records for this station and date range.")
