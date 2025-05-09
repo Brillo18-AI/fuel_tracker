@@ -156,12 +156,12 @@ def owner_view():
     # 2. Load pump reports
     try:
         records = sheet.worksheet("pump_reports").get_all_records()
-    if not records:
-        st.info("No reports available yet.")
-        return
-    df = pd.DataFrame(records)  # Moved up here
-        except Exception as e:
-            st.error(f"Failed to fetch reports: {e}")
+        if not records:
+           st.info("No reports available yet.")
+           return
+        df = pd.DataFrame(records)  # Moved up here
+    except Exception as e:
+        st.error(f"Failed to fetch reports: {e}")
         return
 
     df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")  # Now safe to use df
