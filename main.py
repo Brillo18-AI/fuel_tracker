@@ -143,57 +143,63 @@ def manager_view(station_id):
 
 # Owner view (with zoom control)
 def owner_view():
-    st.title("All Stations Dashboard")
+    st.title("Owner Dashboard")
+
+    # 1. Connect to sheet
     sheet = connect_to_sheet()
-    if sheet:
-        records = sheet.worksheet("daily_reports").get_all_records()
-        df = pd.DataFrame(records)
-        
-        df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
-        from_date = st.date_input("From date", datetime.now())
-        df = df[df['date'] >= pd.to_datetime(from_date)]
-        
-        # Get unique stations and allow owner to select one
-        stations = df['station_id'].unique()
-        station_selected = st.selectbox("Select a station", stations)
-
-        # Filter only the selected station
-        station_df = df[df['station_id'] == station_selected]
-
-        
-        tanks = station_df['tank_no'].unique()
-        for tank in tanks:
-            st.markdown(f" {tank}")
-            tank_df = station_df[station_df['tank_no'] == tank]
-            # Initialize display_df with required columns
-            display_df = tank_df[['date', 'opening', 'received', 'sales', 'closing', 'balance', 'revenue', 'price per liter']].copy()
-
-            # Format 'price per liter' with ₦ symbol
-            if 'price per liter' in display_df.columns:
-                display_df['price per liter'] = display_df['price per liter'].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
-            
-            # Format 'revenue' with ₦ symbol
-            display_df['revenue'] = display_df['revenue'].apply(lambda x: f"₦{x:,.2f}" if isinstance(x, (int, float)) else x)
-
-
-
-
-            # Format numeric columns with comma separation
-            for col in ['opening', 'received', 'sales', 'closing', 'balance']:
-                display_df[col] = display_df[col].apply(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
-
-            # display dataframe
-            st.dataframe(
-                display_df.sort_values('date').reset_index(drop=True)
-            )
-            
-
-
-            st.write("---")
-    else:
+    if not sheet:
         st.error("Couldn't load data.")
-        
+        return
+
+    # 2. Load pump reports
+    try:
+        records = sheet.worksheet("pump_reports").get_all_records()
+        if not records:
+            st.info("No reports available yet.")
+            return
+    except Exception as e:
+        st.error(f"Failed to fetch reports: {e}")
+        return
+
+    df = pd.DataFrame(records)
+    df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
+
+    # 3. Date picker
+    from_date = st.date_input("From date", datetime.now())
+    df = df[df['date'] >= pd.to_datetime(from_date)]
+
+    # 4. Station selector
+    stations = df['station_id'].unique()
+    if len(stations) == 0:
+        st.warning("No stations found in data.")
+        return
+
+    selected_station = st.selectbox("Select Station", stations)
+    df = df[df['station_id'] == selected_station]
+
+    if df.empty:
+        st.info("No records for this station and date range.")
+        return
+
+    # 5. Sort by date descending
+    df = df.sort_values(by="date", ascending=False).reset_index(drop=True)
+
+    # 6. Display styled entries
+    for idx, row in df.iterrows():
+        st.markdown(f"""
+        ### 🗓️ {row['date'].strftime('%Y-%m-%d')} — {row['tank']} / {row['pump']}
+        **Price per Liter:** ₦{row['price_per_liter']:,.2f}  
+        **Open Meter:** {row['open_meter']:,.2f}  
+        **Close Meter:** {row['close_meter']:,.2f}  
+        **Expected Liters:** {row['expected_liters']:,.2f} L  
+        **Expected Cash:** ₦{row['expected_cash']:,.2f}  
+        **Expenses:** ₦{row['expenses']:,.2f}  
+        **Cash at Hand:** ₦{row['cash_at_hand']:,.2f}
+        ---
+        """, unsafe_allow_html=True)
+    
     apply_zoom()
+
 # Main flow
 
 def main():
