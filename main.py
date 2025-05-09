@@ -180,6 +180,8 @@ def owner_view():
     selected_station = st.selectbox("Select Station", stations)
     station_df = df[df['station_id'] == station_selected]
 
+    df = pd.DataFrame(records)
+    st.write("DEBUG: Column names in df →", df.columns.tolist())
 
     if df.empty:
         st.info("No records for this station and date range.")
