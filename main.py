@@ -159,7 +159,7 @@ def owner_view():
         if not records:
            st.info("No reports available yet.")
            return
-        df = pd.DataFrame(records)  # Moved up here
+
     except Exception as e:
         st.error(f"Failed to fetch reports: {e}")
         return
@@ -181,10 +181,10 @@ def owner_view():
     selected_station = st.selectbox("Select Station", stations)
     station_df = df[df['station_id'] == selected_station]
 
-    df = pd.DataFrame(records)
+    
     st.write("DEBUG: Column names in df →", df.columns.tolist())
 
-    if df.empty:
+    if station_df.empty:
         st.info("No records for this station and date range.")
         return
 
