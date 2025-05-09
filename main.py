@@ -162,25 +162,28 @@ def owner_view():
 
         df = pd.DataFrame(records)
 
+        # Debug: Show the DataFrame and columns
+        st.write("DEBUG: Raw DataFrame →", df.head())  # Show first few rows
+
         if "date" not in df.columns:
             st.error("⚠️ 'date' column missing from data.")
-            st.write("DEBUG columns:", df.columns.tolist())
-        return
+            st.write("DEBUG columns:", df.columns.tolist())  # Show columns
+            return
 
+        # Convert the date column to datetime
         df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+        # Debug: Check if the conversion worked
+        st.write("DEBUG: Date column after conversion →", df['date'].head())
 
         if df['date'].isnull().all():
             st.error("⚠️ All 'date' values could not be parsed.")
-            st.dataframe(df)
-        return
+            st.dataframe(df)  # Show the whole dataframe for debugging
+            return
 
     except Exception as e:
         st.error(f"Failed to fetch or process reports: {e}")
         return
-
-
-    df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")  # Now safe to use df
-
 
     # 3. Date picker
     from_date = st.date_input("From date", datetime.now())
@@ -196,15 +199,15 @@ def owner_view():
     selected_station = st.selectbox("Select Station", stations)
     station_df = df[df['station_id'] == selected_station]
 
-    
-    st.write("DEBUG: Column names in df →", df.columns.tolist())
-
     if station_df.empty:
-        st.info("No records for this station and date range.")
+        st.warning(f"No records found for the selected station ({selected_station})")
         return
 
     # 5. Sort by date descending
-    df = df.sort_values(by="date", ascending=False).reset_index(drop=True)
+    station_df = station_df.sort_values(by="date", ascending=False).reset_index(drop=True)
+
+    # Debug: Show the filtered DataFrame
+    st.write("DEBUG: Filtered DataFrame →", station_df.head())
 
     st.markdown("## 📋 Station Reports")
 
