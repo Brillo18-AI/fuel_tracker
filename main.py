@@ -163,7 +163,7 @@ def owner_view():
         st.error(f"Failed to fetch reports: {e}")
         return
 
-    df = pd.DataFrame(records)
+   
     df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")
 
     # 3. Date picker
