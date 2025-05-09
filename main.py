@@ -160,18 +160,18 @@ def owner_view():
             st.info("No reports available yet.")
             return
 
-    df = pd.DataFrame(records)
+        df = pd.DataFrame(records)
 
-    if "date" not in df.columns:
-        st.error("⚠️ 'date' column missing from data.")
-        st.write("DEBUG columns:", df.columns.tolist())
+        if "date" not in df.columns:
+            st.error("⚠️ 'date' column missing from data.")
+            st.write("DEBUG columns:", df.columns.tolist())
         return
 
-    df['date'] = pd.to_datetime(df['date'], errors='coerce')
+        df['date'] = pd.to_datetime(df['date'], errors='coerce')
 
-    if df['date'].isnull().all():
-        st.error("⚠️ All 'date' values could not be parsed.")
-        st.dataframe(df)
+        if df['date'].isnull().all():
+            st.error("⚠️ All 'date' values could not be parsed.")
+            st.dataframe(df)
         return
 
     except Exception as e:
