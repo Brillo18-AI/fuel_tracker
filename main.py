@@ -160,8 +160,8 @@ def owner_view():
         st.info("No reports available yet.")
         return
     df = pd.DataFrame(records)  # Moved up here
-    except Exception as e:
-        st.error(f"Failed to fetch reports: {e}")
+        except Exception as e:
+            st.error(f"Failed to fetch reports: {e}")
     return
 
     df['date'] = pd.to_datetime(df['date'], format="%Y-%m-%d")  # Now safe to use df
