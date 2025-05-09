@@ -76,54 +76,54 @@ def login():
             st.sidebar.error("Invalid credentials")
 
 
-# Manager view with inputs for four tanks
+# Manager view with inputs with pump features
 def manager_view(station_id):
-    st.title(f"Station {station_id} Daily Report")
-    price_per_liter = st.number_input("Price per Liter (₦)", min_value=0.0, format="%.2f")
-    
-    # List of four tanks per station
-    tanks = ["Tank 1", "Tank 2", "Tank 3", "Tank 4"]
-    with st.form(key="report_form"):
-        date = st.date_input("Date", datetime.now())
-        # Collect inputs per tank
-        tank_data = {}
-        for tank in tanks:
-            st.subheader(tank)
-            opening = formatted_number_input(f"{tank} Opening Stock (L)", f"{tank}_opening")
-            received = formatted_number_input(f"{tank} Received Today (L)", f"{tank}_received")
-            sales = formatted_number_input(f"{tank} Sales (L)", f"{tank}_sales")
-            closing = formatted_number_input(f"{tank} Closing Stock (L)", f"{tank}_closing")
+    st.title("Daily Pump Report")
 
-            tank_data[tank] = {
-                "opening": opening,
-                "received": received,
-                "sales": sales,
-                "closing": closing
-            }
-        
-    
-        if st.form_submit_button("Submit Report"):
-            sheet = connect_to_sheet()
-            if sheet:
-                ws = sheet.worksheet("daily_reports")
-                for tank, data in tank_data.items():
-                    balance = data['opening'] + data['received'] - data['sales']
-                    revenue = price_per_liter * data['sales']
-                    ws.append_row([
-                        date.strftime("%Y-%m-%d"),
-                        station_id,
-                        tank,
-                        data['opening'],
-                        data['received'],
-                        data['sales'], 
-                        data['closing'],
-                        balance, 
-                        price_per_liter, 
-                        revenue
-                    ])
-                st.success("All tank reports submitted successfully!")
-            else:
-                st.error("Failed to save reports.")
+    st.markdown(f"### Station: **{station_id}**")
+    date = st.date_input("Date", datetime.now())
+
+    tanks = ["Tank 1", "Tank 2", "Tank 3", "Tank 4"]
+    pumps = ["Pump A", "Pump B", "Pump C", "Pump D"]
+
+    selected_tank = st.selectbox("Select Tank", tanks)
+    selected_pump = st.selectbox("Select Pump", pumps)
+
+    price_per_liter = st.number_input("Price per Liter (₦)", min_value=0.0, format="%.2f")
+
+    open_meter = st.number_input("Open Meter Reading", min_value=0.0, format="%.2f")
+    close_meter = st.number_input("Close Meter Reading", min_value=open_meter, format="%.2f")
+
+    expected_liters = st.number_input("Expected Liters (or auto-calc)", value=close_meter - open_meter, format="%.2f")
+    expected_cash = st.number_input("Expected Cash (₦)", value=expected_liters * price_per_liter, format="%.2f")
+
+    expenses = st.number_input("Expenses (₦)", min_value=0.0, format="%.2f")
+    cash_at_hand = st.number_input("Cash at Hand (₦)", min_value=0.0, format="%.2f")
+
+    if st.button("Submit Report"):
+        sheet = connect_to_sheet()
+        if sheet:
+            try:
+                ws = sheet.worksheet("pump_reports")
+                ws.append_row([
+                    date.strftime("%Y-%m-%d"),
+                    station_id,
+                    selected_tank,
+                    selected_pump,
+                    price_per_liter,
+                    open_meter,
+                    close_meter,
+                    expected_liters,
+                    expected_cash,
+                    expenses,
+                    cash_at_hand
+                ])
+                st.success("Pump report submitted successfully!")
+            except Exception as e:
+                st.error(f"Failed to save report: {e}")
+        else:
+            st.error("Google Sheet connection failed.")
+
 
 # Owner view (with zoom control)
 def owner_view():
