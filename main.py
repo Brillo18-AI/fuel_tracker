@@ -5,6 +5,8 @@ import pandas as pd
 from google.oauth2.service_account import Credentials
 st.cache_data.clear()
 
+
+
 # Page config
 st.set_page_config(page_title="Fuel Tracker", layout="wide")
 
@@ -184,20 +186,34 @@ def owner_view():
     # 5. Sort by date descending
     df = df.sort_values(by="date", ascending=False).reset_index(drop=True)
 
-    # 6. Display styled entries
-    for idx, row in df.iterrows():
+    st.markdown("## 📋 Station Reports")
+
+    # Display each row in a styled card
+    for _, row in station_df.iterrows():
         st.markdown(f"""
-        ### 🗓️ {row['date'].strftime('%Y-%m-%d')} — {row['tank']} / {row['pump']}
-        **Price per Liter:** ₦{row['price_per_liter']:,.2f}  
-        **Open Meter:** {row['open_meter']:,.2f}  
-        **Close Meter:** {row['close_meter']:,.2f}  
-        **Expected Liters:** {row['expected_liters']:,.2f} L  
-        **Expected Cash:** ₦{row['expected_cash']:,.2f}  
-        **Expenses:** ₦{row['expenses']:,.2f}  
-        **Cash at Hand:** ₦{row['cash_at_hand']:,.2f}
-        ---
+        <div style="background-color: #fdfdfd; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 1.2rem; font-size: 0.95rem;">
+            <h4 style="margin-top: 0;">🗓️ {row['date'].strftime('%Y-%m-%d')} — {row['tank']} / {row['pump']}</h4>
+            <p><strong>Price per Litre:</strong> ₦{row['price_per_litre']:,.2f}</p>
+            <p><strong>Open Meter:</strong> {row['open_meter']:,.2f}</p>
+            <p><strong>Close Meter:</strong> {row['close_meter']:,.2f}</p>
+            <p><strong>Expected Liters:</strong> {row['expected_liters']:,.2f} L</p>
+            <p><strong>Expected Cash:</strong> <span style="color: #007BFF;">₦{row['expected_cash']:,.2f}</span></p>
+            <p><strong>Expenses:</strong> <span style="color: #dc3545;">₦{row['expenses']:,.2f}</span></p>
+            <p><strong>Cash at Hand:</strong> <span style="color: #28a745;">₦{row['cash_at_hand']:,.2f}</span></p>
+        </div>
         """, unsafe_allow_html=True)
-    
+
+    # Totals Summary
+    total_expected_cash = station_df['expected_cash'].sum()
+    total_expenses = station_df['expenses'].sum()
+    total_cash = station_df['cash_at_hand'].sum()
+
+    st.markdown("## 🧾 Summary")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Expected Cash Total", f"₦{total_expected_cash:,.2f}")
+    col2.metric("Total Expenses", f"₦{total_expenses:,.2f}")
+    col3.metric("Total Cash at Hand", f"₦{total_cash:,.2f}")
+
     apply_zoom()
 
 # Main flow
