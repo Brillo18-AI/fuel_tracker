@@ -178,7 +178,7 @@ def owner_view():
         return
 
     selected_station = st.selectbox("Select Station", stations)
-    station_df = df[df['station_id'] == station_selected]
+    station_df = df[df['station_id'] == selected_station]
 
     df = pd.DataFrame(records)
     st.write("DEBUG: Column names in df →", df.columns.tolist())
