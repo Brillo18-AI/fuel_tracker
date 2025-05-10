@@ -174,7 +174,7 @@ def owner_view():
         df['date'] = pd.to_datetime(df['date'], errors='coerce')
 
         # Debug: Check if the conversion worked
-        st.write("DEBUG: Date column after conversion →", df['date'].head())
+        #st.write("DEBUG: Date column after conversion →", df['date'].head())
 
         if df['date'].isnull().all():
             st.error("⚠️ All 'date' values could not be parsed.")
