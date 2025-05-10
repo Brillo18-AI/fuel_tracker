@@ -163,11 +163,11 @@ def owner_view():
         df = pd.DataFrame(records)
 
         # Debug: Show the DataFrame and columns
-        st.write("DEBUG: Raw DataFrame →", df.head())  # Show first few rows
+        #st.write("DEBUG: Raw DataFrame →", df.head())  # Show first few rows
 
         if "date" not in df.columns:
             st.error("⚠️ 'date' column missing from data.")
-            st.write("DEBUG columns:", df.columns.tolist())  # Show columns
+            #st.write("DEBUG columns:", df.columns.tolist())  # Show columns
             return
 
         # Convert the date column to datetime
@@ -207,7 +207,7 @@ def owner_view():
     station_df = station_df.sort_values(by="date", ascending=False).reset_index(drop=True)
 
     # Debug: Show the filtered DataFrame
-    st.write("DEBUG: Filtered DataFrame →", station_df.head())
+    #st.write("DEBUG: Filtered DataFrame →", station_df.head())
 
     st.markdown("## 📋 Station Reports")
 
