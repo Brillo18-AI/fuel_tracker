@@ -216,7 +216,7 @@ def owner_view():
         st.markdown(f"""
         <div style="background-color: #fdfdfd; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 1.2rem; font-size: 0.95rem;">
             <h4 style="margin-top: 0;">🗓️ {row['date'].strftime('%Y-%m-%d')} — {row['tank']} / {row['pump']}</h4>
-            <p><strong>Price per Litre:</strong> ₦{row['price_per_litre']:,.2f}</p>
+            <p><strong>Price per Litre:</strong> ₦{row['price_per_liter']:,.2f}</p>
             <p><strong>Open Meter:</strong> {row['open_meter']:,.2f}</p>
             <p><strong>Close Meter:</strong> {row['close_meter']:,.2f}</p>
             <p><strong>Expected Liters:</strong> {row['expected_liters']:,.2f} L</p>
